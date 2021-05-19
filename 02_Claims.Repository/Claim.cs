@@ -20,7 +20,8 @@ namespace _02_Claims.Repository
         public DateTime DateOfClaim { get; set; }
         public System.Data.DataColumnCollection Columns { get; }
         public bool IsValid { get; set; }
-        
+        public string CurrencySymbol { get; set; }
+
 
         public Claim() { }
         public Claim(int claimID, ClaimType claimType, string description, double claimAmount, DateTime dateOfIncident, DateTime dateOfClaim, bool isValid)
@@ -32,6 +33,7 @@ namespace _02_Claims.Repository
             DateOfIncident = dateOfIncident;
             DateOfClaim = dateOfClaim;
             IsValid = isValid;
+
         }
     }
 }

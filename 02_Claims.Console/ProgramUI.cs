@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,20 +88,19 @@ namespace _02_Claims.Console
                 clmIdRow["Type"] = idPrint.ClaimType;
                 clmIdRow["Description"] = idPrint.Description;
                 clmIdRow["Amount"] = idPrint.ClaimAmount;
-                clmIdRow["Date of Incident"] = idPrint.DateOfIncident;
-                clmIdRow["Date of Claim"] = idPrint.DateOfClaim;
+                clmIdRow["Date of Incident"] = idPrint.DateOfIncident.ToString("MM/dd/yyyy");
+                clmIdRow["Date of Claim"] = idPrint.DateOfClaim.ToString("MM/dd/yyyy");
                 clmIdRow["Validity"] = idPrint.IsValid;
                 claimTable.Rows.Add(clmIdRow);
             }
             PrintDataTable(claimTable);
             System.Console.WriteLine();
 
-            //System.Console.WriteLine("ClaimID\tType\tDescription\tAmount\tDateOfAccident\tDateOfClaim\tIsValid");
 
-            //foreach (Claim claim in allClaims)
-            //{
-            //    System.Console.WriteLine($"{claim.ClaimID}\t{claim.ClaimType}\t{claim.Description}\t{claim.ClaimAmount}\t{claim.DateOfIncident}\t{claim.DateOfClaim}\t{claim.IsValid}\n");
-            //}
+            foreach (var claim in allClaims)
+            {
+                string claimAmount = Convert.ToString(claim.ClaimAmount);
+            }
         }
 
         private void PrintDataTable(DataTable claimTable)
@@ -156,7 +156,7 @@ namespace _02_Claims.Console
             //    $"\n" +
             //    $"Do you want to deal with this claim now (y/n)?");
 
-            string input = System.Console.ReadLine();
+            string input = System.Console.ReadLine().ToLower();
             switch (input)
             {
                 case "y":
@@ -164,6 +164,7 @@ namespace _02_Claims.Console
                 System.Console.WriteLine("The claim is ready to be reviewed for processing.");
                     break;
                 case "n":
+                    System.Console.WriteLine("The claim has been returned to queue.");
                     Menu();
                     break;
                 default:
@@ -204,10 +205,10 @@ namespace _02_Claims.Console
         }
 
         private void SeedContent()
-        {
-            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400, DateTime.Parse("04/25/2018"), DateTime.Parse("04/27/2018"), true);
-            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000, DateTime.Parse("04/11/2018"), DateTime.Parse("04/12/2018"), true);
-            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4, DateTime.Parse("04/27/2018"), DateTime.Parse("06/01/2018"), false);
+        {            
+            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00, new DateTime(2018, 04, 25), DateTime.Parse("04/27/2018"), true);
+            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00, DateTime.Parse("04/11/2018"), DateTime.Parse("04/12/2018"), true);
+            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00, DateTime.Parse("04/27/2018"), DateTime.Parse("06/01/2018"), false);
 
             _repo.AddClaim(claimOne);
             _repo.AddClaim(claimTwo);
