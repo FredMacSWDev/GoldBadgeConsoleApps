@@ -1,15 +1,16 @@
 ﻿using _02_Claims.Repository;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace _02_Claims.Console
 {
-    private ClaimRepository _claims = new ClaimRepository();
     public class ProgramUI
     {
+        private ClaimRepository _repo = new ClaimRepository();
         public void Run()
         {
             SeedContent();
@@ -60,24 +61,158 @@ namespace _02_Claims.Console
         private void SeeAllClaims()
         {
             System.Console.Clear();
-            Queue<Claim> allClaims = _claims.SeeAllClaims();
+            Queue<Claim> allClaims = _repo.GetClaims();
+            DataTable claimTable = new DataTable("Komodo Insurance Claims Database");
+            System.Console.WriteLine(string.Format("{0," + ((System.Console.WindowWidth / 2) + (claimTable.TableName.Length / 2)) + "}", claimTable));
+            DataColumn claimIdCol = new DataColumn("Claim ID", typeof(int));
+            DataColumn claimTypeCol = new DataColumn("Type", typeof(Enum));
+            DataColumn claimDescCol = new DataColumn("Description", typeof(string));
+            DataColumn claimAmtCol = new DataColumn("Amount", typeof(decimal));
+            DataColumn claimIncCol = new DataColumn("Date of Incident", typeof(DateTime));
+            DataColumn claimClmDtCol = new DataColumn("Date of Claim", typeof(DateTime));
+            DataColumn claimValidCol = new DataColumn("Validity", typeof(bool));
+            claimTable.Columns.Add(claimIdCol);
+            claimTable.Columns.Add(claimTypeCol);
+            claimTable.Columns.Add(claimDescCol);
+            claimTable.Columns.Add(claimAmtCol);
+            claimTable.Columns.Add(claimIncCol);
+            claimTable.Columns.Add(claimClmDtCol);
+            claimTable.Columns.Add(claimValidCol);
+            DataRow clmIdRow;
             
-            System.Console.WriteLine("ClaimID\tType\tDescription\tAmount\tDateOfAccident\tDateOfClaim\tIsValid");
+            foreach (Claim idPrint in allClaims)
+            {
+                clmIdRow = claimTable.NewRow();
+                clmIdRow["Claim ID"] = idPrint.ClaimID;
+                clmIdRow["Type"] = idPrint.ClaimType;
+                clmIdRow["Description"] = idPrint.Description;
+                clmIdRow["Amount"] = idPrint.ClaimAmount;
+                clmIdRow["Date of Incident"] = idPrint.DateOfIncident;
+                clmIdRow["Date of Claim"] = idPrint.DateOfClaim;
+                clmIdRow["Validity"] = idPrint.IsValid;
+                claimTable.Rows.Add(clmIdRow);
+            }
+            PrintDataTable(claimTable);
+            System.Console.WriteLine();
+
+            //System.Console.WriteLine("ClaimID\tType\tDescription\tAmount\tDateOfAccident\tDateOfClaim\tIsValid");
+
+            //foreach (Claim claim in allClaims)
+            //{
+            //    System.Console.WriteLine($"{claim.ClaimID}\t{claim.ClaimType}\t{claim.Description}\t{claim.ClaimAmount}\t{claim.DateOfIncident}\t{claim.DateOfClaim}\t{claim.IsValid}\n");
+            //}
+        }
+
+        private void PrintDataTable(DataTable claimTable)
+        {
+
+            System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 16}\t{4, 5}\t{5, 12}\t{6, 16}",
+                "Claim ID",
+                "Type",
+                "Description",
+                "Amount",
+                "Date of Incident",
+                "Date of Claim",
+                "Validity"
+                );
+            foreach (DataRow row in claimTable.Rows)
+            {
+                System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 8}\t{4, 5}\t{5, 12}\t{6, 8}",
+                row["Claim ID"],
+                row["Type"],
+                row["Description"],
+                row["Amount"],
+                row["Date of Incident"],
+                row["Date of Claim"],
+                row["Validity"]);
+            }
         }
 
         private void TakeCareOfClaim()
         {
+            System.Console.Clear();            
+            System.Console.WriteLine("Here are the details for the next claim to be handled:\n");
 
+            Queue<Claim> newDetails = _repo.GetClaims();
+            Claim nextClaim = newDetails.Peek();
+
+            System.Console.WriteLine($"Claim ID: \n" +
+                $"Type: \n" +
+                $"Description:  \n" +
+                $"Amount:  \n" +
+                $"Date of Incident: \n" +
+                $"Date of Claim: \n" +
+                $"IsValid: \n" +
+                $"\n" +
+                $"Do you want to deal with this claim now (y/n)?");
+
+            //System.Console.WriteLine($"Claim ID: {newDetails.ClaimID}\n" +
+            //    $"Type: {newDetails.ClaimType}\n" +
+            //    $"Description:  {newDetails.Description}\n" +
+            //    $"Amount:  ${newDetails.ClaimAmount}\n" +
+            //    $"Date of Incident:  {newDetails.DateOfIncident}\n" +
+            //    $"Date of Claim:  {newDetails.DateOfClaim}\n" +
+            //    $"IsValid:  {newDetails.IsValid}\n" +
+            //    $"\n" +
+            //    $"Do you want to deal with this claim now (y/n)?");
+
+            string input = System.Console.ReadLine();
+            switch (input)
+            {
+                case "y":
+                    newDetails.Dequeue();
+                System.Console.WriteLine("The claim is ready to be reviewed for processing.");
+                    break;
+                case "n":
+                    Menu();
+                    break;
+                default:
+                    System.Console.WriteLine("Please enter either y or n");
+                    break;
+            }
+
+            
         }
 
         private void EnterNewClaim()
         {
+            System.Console.Clear();
+            Claim addClaim = new Claim();
+
+            System.Console.WriteLine("Please enter the NEW Claim Number:\n");
+            string claimIdAsString = System.Console.ReadLine();
+            int claimIdAsInt = Convert.ToInt32(claimIdAsString);
+            addClaim.ClaimID = claimIdAsInt;
+
+            System.Console.WriteLine("Please enter the NEW Claim Type:\n" +
+                "1) Car\n" +
+                "2) Home\n" +
+                "3) Theft\n");
+
+            string claimTypeAsString = System.Console.ReadLine();
+            int claimTypeAsInt = Convert.ToInt32(claimTypeAsString);
+            addClaim.ClaimType = (ClaimType)claimTypeAsInt;
+
+            System.Console.WriteLine("Please enter a description of the NEW Claim:\n");
+            addClaim.Description = System.Console.ReadLine();
+
+            System.Console.WriteLine("Please enter the NEW Claim Amount:\n");
+            string claimAmountAsString = System.Console.ReadLine();
+            double claimAmountAsDouble = Convert.ToDouble(claimAmountAsString);
+            addClaim.ClaimAmount = claimAmountAsDouble;
 
         }
 
-        public void SeedContent()
+        private void SeedContent()
         {
             Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400, DateTime.Parse("04/25/2018"), DateTime.Parse("04/27/2018"), true);
+            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000, DateTime.Parse("04/11/2018"), DateTime.Parse("04/12/2018"), true);
+            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4, DateTime.Parse("04/27/2018"), DateTime.Parse("06/01/2018"), false);
+
+            _repo.AddClaim(claimOne);
+            _repo.AddClaim(claimTwo);
+            _repo.AddClaim(claimThree);
+
         }
     }
 }
