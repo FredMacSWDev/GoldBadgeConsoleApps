@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace _01_Cafe.Repository
 {
-    //public enum IngredientsBin 
-    //{ 
-    //    CoffeeBeans = 1, 
-    //    Milk, 
-    //    WhippedCream, 
-    //    Espresso, 
-    //    ChocolateSyrup, 
-    //    VanillaSyrup, 
-    //    CaramelSyrup, 
-    //    ShavedChocolate, 
-    //    Cinnamon 
-    //}
+    public enum MealName
+    {
+        CoffeeDonuts,
+        EnglishMuffinsOrangeJuice,
+        EggCheeseBiscuitOrangeJuice,
+        MilkDonuts,
+        BagelsMilk,
+        PancakesHashBrownsOrangeJuice,
+        WafflesHashBrownsOrangeJuice,
+        BigBreakfastOrangeJuice,
+    }
     public enum MenuItem 
     { 
         Coffee = 1, 
