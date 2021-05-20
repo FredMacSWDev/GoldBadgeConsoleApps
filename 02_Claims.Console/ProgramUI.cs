@@ -69,8 +69,8 @@ namespace _02_Claims.Console
             DataColumn claimTypeCol = new DataColumn("Type", typeof(Enum));
             DataColumn claimDescCol = new DataColumn("Description", typeof(string));
             DataColumn claimAmtCol = new DataColumn("Amount", typeof(string));
-            DataColumn claimIncCol = new DataColumn("Date of Incident", typeof(DateTime));
-            DataColumn claimClmDtCol = new DataColumn("Date of Claim", typeof(DateTime));
+            DataColumn claimIncCol = new DataColumn("Date of Incident", typeof(string));
+            DataColumn claimClmDtCol = new DataColumn("Date of Claim", typeof(string));
             DataColumn claimValidCol = new DataColumn("Validity", typeof(bool));
             claimTable.Columns.Add(claimIdCol);
             claimTable.Columns.Add(claimTypeCol);
@@ -100,7 +100,7 @@ namespace _02_Claims.Console
         private void PrintDataTable(DataTable claimTable)
         {
 
-            System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 17}\t{4, 5}\t{5, 12}\t{6, 16}",
+            System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 17}\t{4, 2}\t{5, 0}\t{6, 0}",
                 "Claim ID",
                 "Type",
                 "Description",
@@ -112,7 +112,7 @@ namespace _02_Claims.Console
 
             foreach (DataRow row in claimTable.Rows)
             {
-                System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 9}\t{4, 5}\t{5, 12}\t{6, 8}",
+                System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 9}\t{4, 2}\t{5, 18}\t{6, 8}",
                 row["Claim ID"],
                 row["Type"],
                 row["Description"],
