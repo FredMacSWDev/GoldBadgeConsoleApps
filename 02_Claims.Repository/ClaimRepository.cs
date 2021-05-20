@@ -21,9 +21,14 @@ namespace _02_Claims.Repository
             _claims.Enqueue(newClaim);
         }
 
-        public void WorkClaim()
+        public Claim WorkClaim()
         {
-            _claims.Dequeue();
+            return _claims.Dequeue();
+        }
+
+        public Claim SeeNextClaim()
+        {
+            return _claims.Peek();
         }
 
         //public bool IsValid(Claim claim)

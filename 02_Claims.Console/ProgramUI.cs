@@ -68,7 +68,7 @@ namespace _02_Claims.Console
             DataColumn claimIdCol = new DataColumn("Claim ID", typeof(int));
             DataColumn claimTypeCol = new DataColumn("Type", typeof(Enum));
             DataColumn claimDescCol = new DataColumn("Description", typeof(string));
-            DataColumn claimAmtCol = new DataColumn("Amount", typeof(decimal));
+            DataColumn claimAmtCol = new DataColumn("Amount", typeof(string));
             DataColumn claimIncCol = new DataColumn("Date of Incident", typeof(DateTime));
             DataColumn claimClmDtCol = new DataColumn("Date of Claim", typeof(DateTime));
             DataColumn claimValidCol = new DataColumn("Validity", typeof(bool));
@@ -82,31 +82,25 @@ namespace _02_Claims.Console
             DataRow clmIdRow;
             
             foreach (Claim idPrint in allClaims)
-            {
+            {                
                 clmIdRow = claimTable.NewRow();
                 clmIdRow["Claim ID"] = idPrint.ClaimID;
                 clmIdRow["Type"] = idPrint.ClaimType;
                 clmIdRow["Description"] = idPrint.Description;
-                clmIdRow["Amount"] = idPrint.ClaimAmount;
-                clmIdRow["Date of Incident"] = idPrint.DateOfIncident.ToString("MM/dd/yyyy");
+                clmIdRow["Amount"] = idPrint.ClaimAmount.ToString("C2");
+                clmIdRow["Date of Incident"] = idPrint.DateOfIncident.ToString("d");
                 clmIdRow["Date of Claim"] = idPrint.DateOfClaim.ToString("MM/dd/yyyy");
                 clmIdRow["Validity"] = idPrint.IsValid;
                 claimTable.Rows.Add(clmIdRow);
             }
             PrintDataTable(claimTable);
             System.Console.WriteLine();
-
-
-            foreach (var claim in allClaims)
-            {
-                string claimAmount = Convert.ToString(claim.ClaimAmount);
-            }
         }
 
         private void PrintDataTable(DataTable claimTable)
         {
 
-            System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 16}\t{4, 5}\t{5, 12}\t{6, 16}",
+            System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 17}\t{4, 5}\t{5, 12}\t{6, 16}",
                 "Claim ID",
                 "Type",
                 "Description",
@@ -115,9 +109,10 @@ namespace _02_Claims.Console
                 "Date of Claim",
                 "Validity"
                 );
+
             foreach (DataRow row in claimTable.Rows)
             {
-                System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 8}\t{4, 5}\t{5, 12}\t{6, 8}",
+                System.Console.WriteLine("{0, 8}\t{1, 1}\t{2, 5}\t{3, 9}\t{4, 5}\t{5, 12}\t{6, 8}",
                 row["Claim ID"],
                 row["Type"],
                 row["Description"],
@@ -146,16 +141,7 @@ namespace _02_Claims.Console
                 $"\n" +
                 $"Do you want to deal with this claim now (y/n)?");
 
-            //System.Console.WriteLine($"Claim ID: {newDetails.ClaimID}\n" +
-            //    $"Type: {newDetails.ClaimType}\n" +
-            //    $"Description:  {newDetails.Description}\n" +
-            //    $"Amount:  ${newDetails.ClaimAmount}\n" +
-            //    $"Date of Incident:  {newDetails.DateOfIncident}\n" +
-            //    $"Date of Claim:  {newDetails.DateOfClaim}\n" +
-            //    $"IsValid:  {newDetails.IsValid}\n" +
-            //    $"\n" +
-            //    $"Do you want to deal with this claim now (y/n)?");
-
+         
             string input = System.Console.ReadLine().ToLower();
             switch (input)
             {
@@ -199,16 +185,23 @@ namespace _02_Claims.Console
 
             System.Console.Write("Please enter the NEW Claim Amount:  ");
             string claimAmountAsString = System.Console.ReadLine();
-            double claimAmountAsDouble = Convert.ToDouble(claimAmountAsString);
-            addClaim.ClaimAmount = claimAmountAsDouble;
+            decimal claimAmountAsDecimal = Convert.ToDecimal(claimAmountAsString);
+            addClaim.ClaimAmount = claimAmountAsDecimal;
+
+            System.Console.Write("Please enter the NEW Claim Date of Incident:  ");
+            string claimIncDt = System.Console.ReadLine();
+            DateTime clmIncToDateTime = Convert.ToDateTime(claimIncDt);
+            addClaim.DateOfIncident = clmIncToDateTime;
+
+
 
         }
 
         private void SeedContent()
         {            
-            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00, new DateTime(2018, 04, 25), new DateTime(2018, 04, 27), true);
-            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00, new DateTime(2018, 04, 11), new DateTime(2018, 04, 12), true);
-            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00, new DateTime(2018, 04, 27), new DateTime(2018, 06, 01), false);
+            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00M, new DateTime(2018, 04, 25), new DateTime(2018, 04, 27), true);
+            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00M, new DateTime(2018, 04, 11), new DateTime(2018, 04, 12), true);
+            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00M, new DateTime(2018, 04, 27), new DateTime(2018, 06, 01), false);
 
             _repo.AddClaim(claimOne);
             _repo.AddClaim(claimTwo);

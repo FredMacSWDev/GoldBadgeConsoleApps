@@ -14,13 +14,13 @@ namespace _02_Claims.Tests
         private Claim _claims;
         private ClaimRepository _repo;
 
-        [TestInitialize]
-        public void Arrange()
-        {
-            _repo = new ClaimRepository();
-            _claims = new Claim();
-            _repo.AddClaim(_claims);
-        }
+        //[TestInitialize]
+        //public void Arrange()
+        //{
+        //    _repo = new ClaimRepository();
+        //    _claims = new Claim(claimOne);
+        //    _repo.AddClaim(_claims);
+        //}
 
 
         //[TestMethod]
@@ -28,7 +28,7 @@ namespace _02_Claims.Tests
         //{
         //    Claim claim = new Claim();
         //    ClaimRepository repository = new ClaimRepository();
-            
+
         //    bool addClaim = repository.AddClaim(claim);
 
         //    Assert.IsTrue(addClaim);
