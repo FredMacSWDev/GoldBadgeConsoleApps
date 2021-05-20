@@ -33,22 +33,24 @@ namespace _02_Claims.Repository
                     return false;
                 }
             }
-            
         }
-        public string CurrencySymbol { get; set; }
 
+        public string CurrencySymbol { get; set; }
+      
 
         public Claim() { }
-        public Claim(int claimID, ClaimType claimType, string description, decimal claimAmount, DateTime dateOfIncident, DateTime dateOfClaim, bool isValid)
+        public Claim(int claimID, ClaimType claimType, string description, decimal claimAmount, DateTime dateOfIncident, DateTime dateOfClaim)
         {
             ClaimID = claimID;
             ClaimType = claimType;
             Description = description;
             ClaimAmount = claimAmount;
             DateOfIncident = dateOfIncident;
-            DateOfClaim = dateOfClaim;
-            //IsValid = isValid;
-
-        }
-    }
+            DateOfClaim = dateOfClaim;            
+        }       
+    }      
 }
+        
+        
+
+

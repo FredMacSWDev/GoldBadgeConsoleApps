@@ -11,27 +11,26 @@ namespace _02_Claims.Tests
     [TestClass]
     public class ClaimRepoTests
     {
-        private Claim _claims;
-        private ClaimRepository _repo;
+        public Claim _claims;
+        public ClaimRepository _repo;
 
-        //[TestInitialize]
-        //public void Arrange()
-        //{
-        //    _repo = new ClaimRepository();
-        //    _claims = new Claim(claimOne);
-        //    _repo.AddClaim(_claims);
-        //}
+        [TestInitialize]
+        public void Arrange()
+        {
+            _repo = new ClaimRepository();
+            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00M, new DateTime(2018, 04, 25), new DateTime(2018, 04, 27));
+            _repo.AddClaim(_claims);
+        }
 
 
-        //[TestMethod]
-        //public void AddClaim_ShouldGetCorrectBool()
-        //{
-        //    Claim claim = new Claim();
-        //    ClaimRepository repository = new ClaimRepository();
-
-        //    bool addClaim = repository.AddClaim(claim);
-
-        //    Assert.IsTrue(addClaim);
-        //}
+        [TestMethod]
+        public void AddClaim_ShouldGetCorrectBool()
+        {
+            Claim claim = new Claim();
+            int previous = _repo.GetClaims().Count;
+            _repo.AddClaim(claim);
+            int current = _repo.GetClaims().Count;
+            Assert.IsTrue(current == previous + 1);
+        }
     }
 }

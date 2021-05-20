@@ -11,11 +11,23 @@ namespace _02_Claims.Console
 {
     public class ProgramUI
     {
-        private ClaimRepository _repo = new ClaimRepository();
+        private readonly ClaimRepository _repo = new ClaimRepository();
         public void Run()
         {
             SeedContent();
             Menu();
+        }
+
+        public void SeedContent()
+        {            
+            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00M, new DateTime(2018, 04, 25), new DateTime(2018, 04, 27));
+            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00M, new DateTime(2018, 04, 11), new DateTime(2018, 04, 12));
+            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00M, new DateTime(2018, 04, 27), new DateTime(2018, 06, 01));
+
+            _repo.AddClaim(claimOne);
+            _repo.AddClaim(claimTwo);
+            _repo.AddClaim(claimThree);
+
         }
 
         private void Menu()
@@ -89,7 +101,7 @@ namespace _02_Claims.Console
                 clmIdRow["Description"] = idPrint.Description;
                 clmIdRow["Amount"] = idPrint.ClaimAmount.ToString("C2");
                 clmIdRow["Date of Incident"] = idPrint.DateOfIncident.ToString("d");
-                clmIdRow["Date of Claim"] = idPrint.DateOfClaim.ToString("MM/dd/yyyy");
+                clmIdRow["Date of Claim"] = idPrint.DateOfClaim.ToString("d");
                 clmIdRow["Validity"] = idPrint.IsValid;
                 claimTable.Rows.Add(clmIdRow);
             }
@@ -125,19 +137,17 @@ namespace _02_Claims.Console
 
         private void TakeCareOfClaim()
         {
-            System.Console.Clear();            
+            System.Console.Clear();
+            Claim nextClaim =  _repo.NextClaimInQueue();
             System.Console.WriteLine("Here are the details for the next claim to be handled:\n");
-
-            Queue<Claim> newDetails = _repo.GetClaims();
-            Claim nextClaim = newDetails.Peek();
-
-            System.Console.WriteLine($"Claim ID: \n" +
-                $"Type: \n" +
-                $"Description:  \n" +
-                $"Amount:  \n" +
-                $"Date of Incident: \n" +
-                $"Date of Claim: \n" +
-                $"IsValid: \n" +
+                        
+            System.Console.WriteLine($"Claim ID: {nextClaim.ClaimID}\n" +
+                $"Type: {nextClaim.ClaimType}\n" +
+                $"Description:  {nextClaim.Description}\n" +
+                $"Amount:  {nextClaim.ClaimAmount}\n" +
+                $"Date of Incident: {nextClaim.DateOfIncident}\n" +
+                $"Date of Claim: {nextClaim.DateOfClaim}\n" +
+                $"IsValid: {nextClaim.IsValid}\n" +
                 $"\n" +
                 $"Do you want to deal with this claim now (y/n)?");
 
@@ -146,11 +156,13 @@ namespace _02_Claims.Console
             switch (input)
             {
                 case "y":
-                    newDetails.Dequeue();
+                    _repo.WorkClaim();
                 System.Console.WriteLine("The claim is ready to be reviewed for processing.");
+                    System.Console.ReadLine();
                     break;
                 case "n":
-                    System.Console.WriteLine("The claim has been returned to queue.");
+                    System.Console.WriteLine("This claim will not be worked.");
+                    System.Console.ReadLine();
                     Menu();
                     break;
                 default:
@@ -161,12 +173,18 @@ namespace _02_Claims.Console
             
         }
 
+        //private void NextClaimInQueue()
+        //{
+        //    Claim inQueue = _repo.NextClaimInQueue();
+
+        //}
+
         private void EnterNewClaim()
         {
             System.Console.Clear();
             Claim addClaim = new Claim();
 
-            System.Console.Write("Please enter the NEW Claim Number:  ");
+            System.Console.Write("Please enter the NEW Claim ID:  ");
             string claimIdAsString = System.Console.ReadLine();
             int claimIdAsInt = Convert.ToInt32(claimIdAsString);
             addClaim.ClaimID = claimIdAsInt;
@@ -183,30 +201,31 @@ namespace _02_Claims.Console
             System.Console.Write("Please enter a description of the NEW Claim:  ");
             addClaim.Description = System.Console.ReadLine();
 
-            System.Console.Write("Please enter the NEW Claim Amount:  ");
+            System.Console.Write("Please enter the Amount of Damage ($) for the NEW Claim:  ");
             string claimAmountAsString = System.Console.ReadLine();
             decimal claimAmountAsDecimal = Convert.ToDecimal(claimAmountAsString);
             addClaim.ClaimAmount = claimAmountAsDecimal;
 
-            System.Console.Write("Please enter the NEW Claim Date of Incident:  ");
+            System.Console.Write("Please enter the NEW claim's Date of Incident:  ");
             string claimIncDt = System.Console.ReadLine();
             DateTime clmIncToDateTime = Convert.ToDateTime(claimIncDt);
             addClaim.DateOfIncident = clmIncToDateTime;
 
+            System.Console.Write("Please enter the NEW claim's Date of Claim:  ");
+            string claimDt = System.Console.ReadLine();
+            DateTime clmIncToDateTime2 = Convert.ToDateTime(claimDt);
+            addClaim.DateOfClaim = clmIncToDateTime2;
 
+            //if (clmIncToDateTime2 - clmIncToDateTime <= Claim validClaims)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
 
-        }
-
-        private void SeedContent()
-        {            
-            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00M, new DateTime(2018, 04, 25), new DateTime(2018, 04, 27), true);
-            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00M, new DateTime(2018, 04, 11), new DateTime(2018, 04, 12), true);
-            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00M, new DateTime(2018, 04, 27), new DateTime(2018, 06, 01), false);
-
-            _repo.AddClaim(claimOne);
-            _repo.AddClaim(claimTwo);
-            _repo.AddClaim(claimThree);
-
+            System.Console.WriteLine("This claim is valid.");
         }
     }
 }

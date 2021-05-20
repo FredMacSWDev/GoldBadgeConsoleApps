@@ -26,17 +26,9 @@ namespace _02_Claims.Repository
             return _claims.Dequeue();
         }
 
-        public Claim SeeNextClaim()
+        public Claim NextClaimInQueue()
         {
             return _claims.Peek();
         }
-
-        //public bool IsValid(Claim claim)
-        //{
-
-        //    int expiryDate = 30;
-        //    matchFound = (expiryDate - DateTime.DateOfIncident).TotalDays < 30;
-
-        //}
     }
 }
