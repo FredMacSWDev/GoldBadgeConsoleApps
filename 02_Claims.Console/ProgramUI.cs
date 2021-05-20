@@ -180,7 +180,7 @@ namespace _02_Claims.Console
             System.Console.Clear();
             Claim addClaim = new Claim();
 
-            System.Console.WriteLine("Please enter the NEW Claim Number:\n");
+            System.Console.Write("Please enter the NEW Claim Number:  ");
             string claimIdAsString = System.Console.ReadLine();
             int claimIdAsInt = Convert.ToInt32(claimIdAsString);
             addClaim.ClaimID = claimIdAsInt;
@@ -194,10 +194,10 @@ namespace _02_Claims.Console
             int claimTypeAsInt = Convert.ToInt32(claimTypeAsString);
             addClaim.ClaimType = (ClaimType)claimTypeAsInt;
 
-            System.Console.WriteLine("Please enter a description of the NEW Claim:\n");
+            System.Console.Write("Please enter a description of the NEW Claim:  ");
             addClaim.Description = System.Console.ReadLine();
 
-            System.Console.WriteLine("Please enter the NEW Claim Amount:\n");
+            System.Console.Write("Please enter the NEW Claim Amount:  ");
             string claimAmountAsString = System.Console.ReadLine();
             double claimAmountAsDouble = Convert.ToDouble(claimAmountAsString);
             addClaim.ClaimAmount = claimAmountAsDouble;
@@ -206,9 +206,9 @@ namespace _02_Claims.Console
 
         private void SeedContent()
         {            
-            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00, new DateTime(2018, 04, 25), DateTime.Parse("04/27/2018"), true);
-            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00, DateTime.Parse("04/11/2018"), DateTime.Parse("04/12/2018"), true);
-            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00, DateTime.Parse("04/27/2018"), DateTime.Parse("06/01/2018"), false);
+            Claim claimOne = new Claim(1, ClaimType.Car, "Car accident on 465.", 400.00, new DateTime(2018, 04, 25), new DateTime(2018, 04, 27), true);
+            Claim claimTwo = new Claim(2, ClaimType.Home, "House fire in kitchen.", 4000.00, new DateTime(2018, 04, 11), new DateTime(2018, 04, 12), true);
+            Claim claimThree = new Claim(3, ClaimType.Theft, "Stolen pancakes.", 4.00, new DateTime(2018, 04, 27), new DateTime(2018, 06, 01), false);
 
             _repo.AddClaim(claimOne);
             _repo.AddClaim(claimTwo);

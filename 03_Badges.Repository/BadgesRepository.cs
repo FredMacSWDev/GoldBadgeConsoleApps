@@ -8,17 +8,29 @@ namespace _03_Badges.Repository
 {
     public class BadgesRepository
     {
-        private Dictionary<int, List<string>> _badgeDatabase = new Dictionary<int, List<string>>();
-        public void AddBadges(Badges badgeID) => _badgeDatabase.Add(badgeID);
+        public Dictionary<int, List<string>> _badgeAccess = new Dictionary<int, List<string>>();
+        //public void AddBadges(Badges badgeID) => _badgeDatabase.Add(badgeID);
 
-        private void EditBadge()
+        public Dictionary<int, List<string>> SeeAllBadges()
         {
-
+            return _badgeAccess;
         }
 
-        private void SeeAllBadges()
+        public void AddBadge(Badges badges)
         {
+            _badgeAccess.Add(badges.BadgeID, badges.Doors);
+        }
 
+        public void EditBadge(int badgeID, string doors)
+        {
+            List<string> doorsAccess = _badgeAccess[badgeID];
+            doorsAccess.Add(doors);
+        }
+
+        public void RemoveBadge(int badgeID, string doors)
+        {
+            List<string> doorsAccess = _badgeAccess[badgeID];
+            doorsAccess.Remove(doors);
         }
     }
 }
